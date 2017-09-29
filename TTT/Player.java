@@ -5,6 +5,7 @@ public class Player {
 
     int firstPlayer;
     long timeLimit;
+    long deadlineDeb;
     /**
     * Performs a move
     *
@@ -17,50 +18,44 @@ public class Player {
     public GameState play(final GameState gameState, final Deadline deadline) {
         Vector<GameState> nextStates = new Vector<GameState>();
         gameState.findPossibleMoves(nextStates);
-
+        deadlineDeb = deadline.timeUntil();
         if (nextStates.size() == 0) {
             // Must play "pass" move if there are no other moves possible.
             return new GameState(gameState, new Move());
         }
-
-        /**
-        * Here you should write your algorithms to get the best next move, i.e.
-        * the best next state. This skeleton returns a random move instead.
-        */
-
         int scoreMax  = Integer.MIN_VALUE ;
 
         //store the best move
         GameState bestState = nextStates.firstElement();
         firstPlayer = gameState.getNextPlayer();
         //depth of the algo
-        int depth = 1;
+        int depth = 2;
 
         // Identification of the player,true if it is our turn false if it is the opponent turn.
         int alpha = Integer.MIN_VALUE;
         int beta = Integer.MAX_VALUE;
-        timeLimit = 1000000000 - 9000000;
-
-        long previousDeadLine = deadline.getCpuTime();
+        timeLimit = 1000000000 - 1000000000/375  ;
+        //System.err.println("timelimit : " + timeLimit);
+        //System.err.println("deadline.timeUntil() : " + deadline.timeUntil());
         while (deadline.timeUntil()>timeLimit){
             depth++;
-            //System.err.println("La profondeur est de : " +depth);
-            if (depth > 20){
+            
+            System.err.println("La profondeur est de : " +depth);
+            if (depth > 16){
                 break;
             }
-            previousDeadLine = deadline.getCpuTime();
 
             for (int i = 0; i < nextStates.size(); i++){
                 int score = alphaBeta(nextStates.get(i), depth-1,alpha, beta, nextStates.get(i).getNextPlayer(), deadline);
                 if ( score > scoreMax){
                     scoreMax = score;
-                    if(deadline.timeUntil()>timeLimit){
+                    if( deadline.timeUntil()>timeLimit){
                         bestState= nextStates.elementAt(i);
                     }
                 }
             }
         }
-        System.err.println("Le score pour ce tour est de : " + scoreMax + " SCORE X : " + estimateCurrentScore(bestState, Constants.CELL_X) + " SCORE O : " + estimateCurrentScore(bestState, Constants.CELL_O) + " depth : " +depth);
+        //System.err.println("Le score pour ce tour est de : " + scoreMax + " SCORE X : " + estimateCurrentScore(bestState, Constants.CELL_X) + " SCORE O : " + estimateCurrentScore(bestState, Constants.CELL_O) + " depth : " +depth);
         return bestState;
     }
 
@@ -91,7 +86,7 @@ public class Player {
         } else {
             score = Integer.MAX_VALUE;
             for(int i = 0; i < nextStates.size(); i++){
-                if (deadline.timeUntil() < timeLimit){
+                if ( deadline.timeUntil() < timeLimit){
                     return 0;
                 }
                 score = min(score, alphaBeta(nextStates.get(i), depth-1, alpha, beta, nextStates.get(i).getNextPlayer(), deadline));
