@@ -30,37 +30,79 @@ public class Player {
         GameState bestState = nextStates.firstElement();
         firstPlayer = gameState.getNextPlayer();
         //depth of the algo
-        int depth = 0;
+        int depth = 1;
 
         // Identification of the player,true if it is our turn false if it is the opponent turn.
         int alpha = Integer.MIN_VALUE;
         int beta = Integer.MAX_VALUE;
         timeLimit = deadline.timeUntil() - 7000000000L/225;   
-        System.err.println("timelimit : " + timeLimit);
-        System.err.println("deadline.timeUntil() : " + deadline.timeUntil());
-        while (deadline.timeUntil()>timeLimit){
-            depth++;
+        //System.err.println("timelimit : " + timeLimit);
+        //System.err.println("deadline.timeUntil() : " + deadline.timeUntil());
+	while (deadline.timeUntil()>timeLimit){
+	    depth++;
             
-          //  System.err.println("La profondeur est de : " +depth);
-            if (depth > 16){
-                //break;
-            }
+	    //  System.err.println("La profondeur est de : " +depth);
+	    if (depth > 16){
+		//break;
+	    }
 
-            for (int i = 0; i < nextStates.size(); i++){
-                int score = alphaBeta(nextStates.get(i), depth-1,alpha, beta, nextStates.get(i).getNextPlayer(), deadline);
-                if ( score > scoreMax){
-                    scoreMax = score;
-                    if( deadline.timeUntil()>timeLimit){
-                        bestState= nextStates.elementAt(i);
-                    }
-                }
-            }
+	    for (int i = 0; i < nextStates.size(); i++){
+		int score = alphaBeta(nextStates.get(i), depth-1,alpha, beta, nextStates.get(i).getNextPlayer(), deadline);
+		if ( score > scoreMax){
+		    scoreMax = score;
+		    if( deadline.timeUntil()>timeLimit){
+			bestState= nextStates.elementAt(i);
+		    }
+		}
+	    }
         }
-        System.err.println("Le score pour ce tour est de : " + scoreMax + " SCORE X : " + estimateCurrentScore(bestState, Constants.CELL_X) + " SCORE O : " + estimateCurrentScore(bestState, Constants.CELL_O) + " depth : " +depth);
-        return bestState;    
-}
+	/* System.err.println(" SCORE X : " + estimateCurrentScore(bestState, Constants.CELL_X) + " SCORE O : " + estimateCurrentScore(bestState, Constants.CELL_O) + " depth : " +depth);
+	   System.err.println();
+        
+        
+        
+        
+        
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+	   System.err.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+        */return bestState;    
+    }
 
-  public int alphaBeta(GameState gameState, int depth, int alpha, int beta, int player, Deadline deadline){
+    public int alphaBeta(GameState gameState, int depth, int alpha, int beta, int player, Deadline deadline){
 
         if (deadline.timeUntil() < timeLimit){
             return 0;
@@ -68,7 +110,7 @@ public class Player {
         Vector<GameState> nextStates = new Vector<GameState>();
         gameState.findPossibleMoves(nextStates);
         int score = 0;
-
+	//        System.err.println("pour cette etape, il y a  : "+nextStates.size() + " d'etats possibles");
         if (depth==0 || nextStates.size()==0){
             score = estimateCurrentScore (gameState,player);
             //System.err.println("Le score après estimation est de :" +score);
@@ -106,27 +148,98 @@ public class Player {
         if (firstPlayer == Constants.CELL_X){
             //System.err.println("on compte les points pour X?");
             if(gameState.isXWin()){
+		/*               System.err.println("POUR LE GAMESTATE SUIVANT : ");
+				 System.err.println(gameState.toString(Constants.CELL_X));
+				 System.err.println( " le score de x est de :" + Integer.MAX_VALUE);
+				 System.err.println();
+				 System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+				 System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+				 System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+				 System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+				 System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+				 System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+				 System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+				 System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+				 System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+				 System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+		*/
                 return Integer.MAX_VALUE;
             }
             if(gameState.isOWin()){
+		/*      System.err.println("POUR LE GAMESTATE SUIVANT : ");
+			System.err.println(gameState.toString(Constants.CELL_X));
+			System.err.println( " le score de x est de :" + Integer.MIN_VALUE);
+			System.err.println();
+                        System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+			System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+			System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+			System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+			System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+			System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+			System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+			System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+			System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+			System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+			System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+			System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+			System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+		*/
                 return Integer.MIN_VALUE;
             }
         } else if (firstPlayer==Constants.CELL_O){
             //System.err.println("on compte les points pour O?");
             if(gameState.isOWin()){
-                return Integer.MAX_VALUE;
+		/*              System.err.println("POUR LE GAMESTATE SUIVANT : ");
+				System.err.println(gameState.toString(Constants.CELL_X));
+				System.err.println( " le score de x est de :" + Integer.MAX_VALUE);
+				System.err.println();
+				System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+				System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+				System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+				System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+				System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+				System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+				System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+				System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+				System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+				System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+                */return Integer.MAX_VALUE;
             }
             if(gameState.isXWin()){
-                return Integer.MIN_VALUE;
+		/*     System.err.println("POUR LE GAMESTATE SUIVANT : ");
+		       System.err.println(gameState.toString(Constants.CELL_X));
+		       System.err.println( " le score de x est de :" + Integer.MIN_VALUE);
+		       System.err.println();
+		       System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+		       System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+		       System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+		       System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+		       System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+		       System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+		       System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+		       System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+		       System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+		       System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+		       System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+		       System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+		       System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+		       System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+		       System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+		       System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+		       System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+		       System.err.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+		*/ return Integer.MIN_VALUE;
             }
         }
 
-       // count the point on the lines on the same layer
+	// count the point on the lines on the same layer
         for(int i = 0; i < gameState.BOARD_SIZE; i++){
             for(int j = 0; j < gameState.BOARD_SIZE; j++){
                 int scoreLine = 0;
+                //System.err.print("on check les case : ");
                 for(int k = 0; k < gameState.BOARD_SIZE;k++){
                     int valueCase = gameState.at(j,k,i);
+                    //System.err.print("\t" + gameState.rowColumnLayerToCell(j,k,i));
                     if (valueCase!= Constants.CELL_EMPTY){
                         if ( firstPlayer == valueCase ){
                             if (scoreLine < 0){
@@ -145,16 +258,21 @@ public class Player {
                         }
                     }
                 }
+                //System.err.println();
                 score += calcValue(scoreLine);
             }
         }
-       // count the point on the columns on the same layer
-/*
+	// count the point on the columns on the same layer
+        //System.err.println();
+        //System.err.println();
+
         for(int i = 0; i < gameState.BOARD_SIZE; i++){
             for(int j = 0; j < gameState.BOARD_SIZE; j++){
                 int scoreColumn = 0;
+		//    System.err.print("on check les case : ");   
                 for(int k =0; k < gameState.BOARD_SIZE; k++){
                     int valueCase = gameState.at(k,j,i);
+		    //                    System.err.print("\t" + gameState.rowColumnLayerToCell(k,j,i));
                     if(valueCase != Constants.CELL_EMPTY){
                         if ( firstPlayer == valueCase){
                             if (scoreColumn < 0){
@@ -173,15 +291,21 @@ public class Player {
                         }
                     }
                 }
-                score += calcValue(scoreColumn);
+		//          System.err.println();
+		score += calcValue(scoreColumn);
             }
         }
-    */    //cont the line on the same column
+	//    System.err.println();
+	//  System.err.println();
+
+        //cont the line on the same column
         for(int i = 0; i < gameState.BOARD_SIZE; i++){
             for(int j = 0; j < gameState.BOARD_SIZE; j++){
+		//               System.err.print("on check les case : ");   
                 int scoreColumn = 0;
                 for(int k =0; k < gameState.BOARD_SIZE; k++){
                     int valueCase = gameState.at(i,j,k);
+		    //                  System.err.print("\t" + gameState.rowColumnLayerToCell(i,j,k));
                     if(valueCase != Constants.CELL_EMPTY){
                         if ( firstPlayer == valueCase){
                             if (scoreColumn < 0){
@@ -200,16 +324,22 @@ public class Player {
                         }
                     }
                 }
+		//             System.err.println();
                 score += calcValue(scoreColumn);
             }
         }
+	//     System.err.println();
+	//      System.err.println();
+
         
         int scoreDiag = 0;
         // count the diag on the same layer
-  /*      for(int k = 0; k < gameState.BOARD_SIZE; k++){
+        for(int k = 0; k < gameState.BOARD_SIZE; k++){
             scoreDiag = 0;
+	    //        System.err.print("on check les case : ");   
             for(int i =0 ; i < gameState.BOARD_SIZE; i++){
                 int valueCase = gameState.at(i,i, k);
+		//            System.err.print("\t" + gameState.rowColumnLayerToCell(i,i,k));
                 if (valueCase != Constants.CELL_EMPTY){
                     if ( firstPlayer == valueCase){
                         if (scoreDiag<0){
@@ -227,9 +357,13 @@ public class Player {
                 }
             }
             score += calcValue(scoreDiag);
+	    //         System.err.println();
+
             scoreDiag = 0;
+	    //       System.err.print("on check les case : ");   
             for(int i =0 ; i < gameState.BOARD_SIZE; i++){
                 int valueCase = gameState.at(i,gameState.BOARD_SIZE-i-1, k);
+		//         System.err.print("\t" + gameState.rowColumnLayerToCell(i, gameState.BOARD_SIZE-i-1, k));
                 if (valueCase != Constants.CELL_EMPTY){
                     if ( firstPlayer == valueCase){
                         if (scoreDiag<0){
@@ -246,13 +380,18 @@ public class Player {
                     }
                 }
             }
+	    //   System.err.println();
             score += calcValue(scoreDiag);
         }
-*/        
+        //System.err.println();
+	//        System.err.println();
+
         //count the diag on the same rows
         for(int k = 0; k < gameState.BOARD_SIZE; k++){
             scoreDiag = 0;
+	    //          System.err.print("on check les case : ");   
             for(int i =0 ; i < gameState.BOARD_SIZE; i++){
+		//            System.err.print("\t" + gameState.rowColumnLayerToCell(k,i,i));
                 int valueCase = gameState.at(k,i, i);
                 if (valueCase != Constants.CELL_EMPTY){
                     if ( firstPlayer == valueCase){
@@ -270,9 +409,12 @@ public class Player {
                     }
                 }
             }
+	    //      System.err.println();
             score += calcValue(scoreDiag);
             scoreDiag = 0;
+	    //    System.err.print("on check les case : ");   
             for(int i =0 ; i < gameState.BOARD_SIZE; i++){
+		//      System.err.print("\t" + gameState.rowColumnLayerToCell(k, i,gameState.BOARD_SIZE-i-1));
                 int valueCase = gameState.at(k, i,gameState.BOARD_SIZE-i-1);
                 if (valueCase != Constants.CELL_EMPTY){
                     if ( firstPlayer == valueCase){
@@ -290,13 +432,19 @@ public class Player {
                     }
                 }
             }
+	    //            System.err.println();
             score += calcValue(scoreDiag);
         }
-      /*  //count the diag on the same columns
+	//      System.err.println();
+	//    System.err.println();
+
+        //count the diag on the same columns
         for(int k = 0; k < gameState.BOARD_SIZE; k++){
+	    //      System.err.print("on check les case : ");   
             scoreDiag = 0;
             for(int i =0 ; i < gameState.BOARD_SIZE; i++){
                 int valueCase = gameState.at(i,k,i);
+		//        System.err.print("\t" + gameState.rowColumnLayerToCell(i,k,i));
                 if (valueCase != Constants.CELL_EMPTY){
                     if ( firstPlayer == valueCase){
                         if (scoreDiag<0){
@@ -314,9 +462,12 @@ public class Player {
                 }
             }
             score += calcValue(scoreDiag);
+	    //  System.err.println();
             scoreDiag = 0;
+            //System.err.print("on check les case : ");   
             for(int i =0 ; i < gameState.BOARD_SIZE; i++){
                 int valueCase = gameState.at(i,k,gameState.BOARD_SIZE-i-1);
+		//  System.err.print("\t" + gameState.rowColumnLayerToCell(i,k,gameState.BOARD_SIZE-i-1));
                 if (valueCase != Constants.CELL_EMPTY){
                     if ( firstPlayer == valueCase){
                         if (scoreDiag<0){
@@ -333,13 +484,18 @@ public class Player {
                     }
                 }
             }
+	    //            System.err.println();
             score += calcValue(scoreDiag);
         }
         scoreDiag = 0;
-        */
-        /*// Compute the four major diagonale
+	//      System.err.println();
+	//        System.err.println();
+
+        // Compute the four major diagonale
+	//      System.err.print("on check les case : ");   
         for (int i = 0; i < gameState.BOARD_SIZE; i++){
             int valueCase = gameState.at(i,i, i);
+	    //        System.err.print("\t" + gameState.rowColumnLayerToCell(i,i,i));
             if (valueCase != Constants.CELL_EMPTY){
                 if ( firstPlayer == valueCase){
                     if (scoreDiag<0){
@@ -356,11 +512,14 @@ public class Player {
                 }
             }
         }
+	//  System.err.println();
         score += calcValue(scoreDiag);
         
+        //System.err.print("on check les case : ");   
         scoreDiag = 0;
         for (int i = 0; i < gameState.BOARD_SIZE; i++){
             int valueCase = gameState.at(i,gameState.BOARD_SIZE-1-i, gameState.BOARD_SIZE-i-1);
+	    //  System.err.print("\t" + gameState.rowColumnLayerToCell(i,gameState.BOARD_SIZE-1-i, gameState.BOARD_SIZE-i-1));
             if (valueCase != Constants.CELL_EMPTY){
                 if ( firstPlayer == valueCase){
                     if (scoreDiag<0){
@@ -377,11 +536,14 @@ public class Player {
                 }
             }
         }
-         score += calcValue(scoreDiag);
+	//        System.err.println();
+        score += calcValue(scoreDiag);
         
+	//      System.err.print("on check les case : ");   
         scoreDiag = 0;
         for (int i = 0; i < gameState.BOARD_SIZE; i++){
             int valueCase = gameState.at(gameState.BOARD_SIZE-1-i,i, gameState.BOARD_SIZE-i-1);
+	    //        System.err.print("\t" + gameState.rowColumnLayerToCell(gameState.BOARD_SIZE-1-i,i, gameState.BOARD_SIZE-i-1));
             if (valueCase != Constants.CELL_EMPTY){
                 if ( firstPlayer == valueCase){
                     if (scoreDiag<0){
@@ -399,11 +561,14 @@ public class Player {
             }
         }
         
+	//  System.err.println();
         score += calcValue(scoreDiag);
         
+        //System.err.print("on check les case : ");   
         scoreDiag = 0;
         for (int i = 0; i < gameState.BOARD_SIZE; i++){
             int valueCase = gameState.at(gameState.BOARD_SIZE-1-i, gameState.BOARD_SIZE-i-1, i);
+	    //  System.err.print("\t" + gameState.rowColumnLayerToCell(gameState.BOARD_SIZE-1-i, gameState.BOARD_SIZE-i-1, i));
             if (valueCase != Constants.CELL_EMPTY){
                 if ( firstPlayer == valueCase){
                     if (scoreDiag<0){
@@ -420,8 +585,19 @@ public class Player {
                 }
             }
         }
-        score += calcValue(scoreDiag);
-*/        return score;
+	//        System.err.println();       
+	//      System.err.println();
+	//    System.err.println();
+	//  System.err.println();
+        //System.err.println();
+        //System.err.println();
+	/*  score += calcValue(scoreDiag);
+	    System.err.println("POUR LE GAMESTATE SUIVANT : ");
+	    System.err.println(gameState.toString(Constants.CELL_X));
+	    System.err.println( " le score de x est de :" + score);
+	    System.err.println();
+        */
+        return score;
 
     }
 
