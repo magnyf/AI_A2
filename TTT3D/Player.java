@@ -18,7 +18,17 @@ public class Player {
     public GameState play(final GameState gameState, final Deadline deadline) {
         Vector<GameState> nextStates = new Vector<GameState>();
         gameState.findPossibleMoves(nextStates);
-
+/* 		for (int i=0; i < nextStates.size(); i++){
+			System.err.print(estimateCurrentScore(nextStates.get(i), 0) + "  ");
+		}
+		System.err.println();
+		Vector<GameState> v = triScore(nextStates);
+		for (int i=0; i < nextStates.size(); i++){
+			System.err.print(estimateCurrentScore(v.get(i), 0) + "  ");
+		}
+		System.err.println(); */
+		
+		
         if (nextStates.size() == 0) {
             // Must play "pass" move if there are no other moves possible.
             return new GameState(gameState, new Move());
@@ -625,8 +635,21 @@ public class Player {
             return (int)-Math.pow(10, -score);
         }
     }
-}
+
 
  
+  // c'est une fonction qui prend en argument un Vector< GameState> et retourne un Vector<GameState> trié
+  // les gameStates dans le retour sont triés par odre décoissant selon leur score avec l'appel à estimateCurrentScore
+  public Vector<GameState> triScore(Vector<GameState> tab){
+	  Vector<GameState> v = new Vector<GameState>(tab);
+	  int i,j;
+	for (i = 1; i < v.size(); ++i) {
+       GameState elem = v.get(i);
+       for (j = i; j > 0 && estimateCurrentScore(v.get(j-1), 0) < estimateCurrentScore(elem, 0); j--)
+           v.set(j,  v.get(j-1));
+       v.set(j, elem);
+	}
+	  return v;
+	}
     
-    
+}
