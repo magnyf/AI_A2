@@ -21,17 +21,17 @@ public class Player {
         
         Vector<GameState> nextStates = new Vector<GameState>();
         gameState.findPossibleMoves(nextStates);
-/* 		for (int i=0; i < nextStates.size(); i++){
-			System.err.print(estimateCurrentScore(nextStates.get(i)) + "  ");
-		}
-		System.err.println();
-		Vector<GameState> v = triScore(nextStates);
-		for (int i=0; i < nextStates.size(); i++){
-			System.err.print(estimateCurrentScore(v.get(i)) + "  ");
-		}
-		System.err.println(); */
-		
-		
+/*      for (int i=0; i < nextStates.size(); i++){
+            System.err.print(estimateCurrentScore(nextStates.get(i)) + "  ");
+        }
+        System.err.println();
+        Vector<GameState> v = triScore(nextStates);
+        for (int i=0; i < nextStates.size(); i++){
+            System.err.print(estimateCurrentScore(v.get(i)) + "  ");
+        }
+        System.err.println(); */
+        
+        
         if (nextStates.size() == 0) {
             // Must play "pass" move if there are no other moves possible.
             return new GameState(gameState, new Move());
@@ -47,39 +47,39 @@ public class Player {
         int depth = 5;
 
         // Identification of the player,true if it is our turn false if it is the opponent turn.
-        timeLimit = 5000000;//deadline.timeUntil() - 7000000000L/150;   
+        timeLimit = 20000000;//deadline.timeUntil() - 7000000000L/150;   
         //System.err.println("timelimit : " + timeLimit);
         //System.err.println("deadline.timeUntil() : " + deadline.timeUntil());
         triScore(nextStates, deadline);
         while (deadline.timeUntil()>timeLimit){
-	    int alpha = Integer.MIN_VALUE;
+        int alpha = Integer.MIN_VALUE;
             int beta = Integer.MAX_VALUE;
 
             depth++;
             
-	    //  System.err.println("La profondeur est de : " +depth);
-	    if (depth > gameState.getMovesUntilDraw()){
-		break;
-	    }
+        //  System.err.println("La profondeur est de : " +depth);
+        if (depth > gameState.getMovesUntilDraw()){
+        break;
+        }
 
             GameState bestCurrentState = new GameState();
             int currentScoreMax = Integer.MIN_VALUE;
-	    for (int i = 0; i < nextStates.size(); i++){
+        for (int i = 0; i < nextStates.size(); i++){
                 if (deadline.timeUntil() < timeLimit){
                     break;
                 }
-		int score = alphaBeta(nextStates.get(i), depth-1,alpha, beta, nextStates.get(i).getNextPlayer(), deadline);
-		if ( score > currentScoreMax){
-		    currentScoreMax = score;
+        int score = alphaBeta(nextStates.get(i), depth-1,alpha, beta, nextStates.get(i).getNextPlayer(), deadline);
+        if ( score > currentScoreMax){
+            currentScoreMax = score;
                     bestCurrentState= nextStates.elementAt(i);
-		}
-	    }
+        }
+        }
             if (deadline.timeUntil() > timeLimit){
                 bestState = bestCurrentState;
                 scoreMax = currentScoreMax;
             }            
         }
-	/* System.err.println(" SCORE X : " + estimateCurrentScore(bestState) + " SCORE O : " + estimateCurrentScore(bestState) + " depth : " +depth);
+    /* System.err.println(" SCORE X : " + estimateCurrentScore(bestState) + " SCORE O : " + estimateCurrentScore(bestState) + " depth : " +depth);
         */
         System.err.println("la profondeur finale est de : " + depth);
         System.err.println("Le score max est de : " + scoreMax);
@@ -94,12 +94,12 @@ public class Player {
         Vector<GameState> nextStates = new Vector<GameState>();
         gameState.findPossibleMoves(nextStates);
         triScore(nextStates, deadline);
-        if(depth == 1){
-            return estimateCurrentScore(nextStates.get(0));
-        }
+        //if(depth == 1){
+         //   return estimateCurrentScore(nextStates.get(0));
+       // }
         
         int score = 0;
-	//        System.err.println("pour cette etape, il y a  : "+nextStates.size() + " d'etats possibles");
+    //        System.err.println("pour cette etape, il y a  : "+nextStates.size() + " d'etats possibles");
         if (depth==0 || nextStates.size()==0){
             score = estimateCurrentScore (gameState);
             //System.err.println("Le score après estimation est de :" +score);
@@ -160,7 +160,7 @@ public class Player {
                 return Integer.MAX_VALUE -1;
             }
             if(gameState.isRedWin()){
-		return Integer.MIN_VALUE +1;
+        return Integer.MIN_VALUE +1;
             }
         }
         int score = 0;
@@ -208,9 +208,9 @@ public class Player {
         if (tab.size() < 2) {
             return;
         }
-        Vector<Integer> score = new Vector<Integer>();
+        int[] score = new int[tab.size()];
         for (int i = 0 ; i < tab.size(); i++){
-            score.add(estimateCurrentScore(tab.get(i)));
+            score[i] = (estimateCurrentScore(tab.get(i)));
         }
         int player = tab.get(0).getNextPlayer();
         int j;
@@ -220,12 +220,12 @@ public class Player {
                     return;
                 }
                 GameState elem = tab.get(i);
-                int s = score.get(i);
-                for (j = i; j > 0 && score.get(j-1) < s; j--){
+                int s = score[i];
+                for (j = i; j > 0 && score[j-1] < s; j--){
                     tab.set(j,  tab.get(j-1));
                     tab.set(j-1, elem);
-                    score.set(j, score.get(j-1));
-                    score.set(j-1, s);
+                    score[j] = score[j-1];
+                    score[j-1] = s;
                 }
             }
         } else {
@@ -234,14 +234,15 @@ public class Player {
                     return;
                 }
                 GameState elem = tab.get(i);
-                int s = score.get(i);
-                for (j = i; j > 0 && score.get(j-1) > s; j--){
+                int s = score[i];
+                for (j = i; j > 0 && score[j-1] > s; j--){
                     tab.set(j,  tab.get(j-1));
                     tab.set(j-1, elem);
-                    score.set(j, score.get(j-1));
-                    score.set(j-1, s);
+                    score[j] = score[j-1];
+                    score[j-1] = s;
                 }
             }
         }
     }  
 }
+
