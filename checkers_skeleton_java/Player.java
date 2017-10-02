@@ -93,7 +93,7 @@ public class Player {
         }
         Vector<GameState> nextStates = new Vector<GameState>();
         gameState.findPossibleMoves(nextStates);
-        triScore(nextStates, deadline);
+        int firstScore = triScore(nextStates, deadline);
         //if(depth == 1){
          //   return estimateCurrentScore(nextStates.get(0));
        // }
@@ -106,6 +106,15 @@ public class Player {
         
         } else if (player==firstPlayer){
             score = Integer.MIN_VALUE;
+            if(depth==1){
+                score = firstScore;
+                alpha = max (alpha, score);
+                if (beta <= alpha){
+                    return alpha;
+                } else {
+                    return score;
+                }
+            }
             for (int i = 0; i  < nextStates.size(); i++){
                 if (deadline.timeUntil() < timeLimit){
                     return 0;
@@ -125,6 +134,15 @@ public class Player {
             }
         } else {
             score = Integer.MAX_VALUE;
+            if(depth==1){
+                score =firstScore; 
+                beta = min (beta, score);
+                if (beta <= alpha){
+                    return beta;
+                } else {
+                    return score;
+                }
+            }
             for(int i = 0; i < nextStates.size(); i++){
                 if ( deadline.timeUntil() < timeLimit){
                     return 0;
@@ -204,20 +222,23 @@ public class Player {
 
   // c'est une fonction qui prend en argument un Vector< GameState> et retourne un Vector<GameState> trié
   // les gameStates dans le retour sont triés par odre décoissant selon leur score avec l'appel à estimateCurrentScore
-    public void triScore(Vector<GameState> tab, Deadline deadline){
-        if (tab.size() < 2) {
-            return;
+    public int triScore(Vector<GameState> tab, Deadline deadline){
+        if(tab.size() == 0){
+            return 0;
         }
         int[] score = new int[tab.size()];
         for (int i = 0 ; i < tab.size(); i++){
             score[i] = (estimateCurrentScore(tab.get(i)));
+        }    
+        if (tab.size() < 2) {
+            return score[0];
         }
         int player = tab.get(0).getNextPlayer();
         int j;
         if(player == firstPlayer){
             for (int i = 1; i < tab.size(); ++i) {
                 if (deadline.timeUntil() < timeLimit){
-                    return;
+                    return score[0];
                 }
                 GameState elem = tab.get(i);
                 int s = score[i];
@@ -231,7 +252,7 @@ public class Player {
         } else {
             for (int i = 1; i < tab.size(); ++i) {
                 if (deadline.timeUntil() < timeLimit){
-                    return;
+                    return score[0];
                 }
                 GameState elem = tab.get(i);
                 int s = score[i];
@@ -243,6 +264,7 @@ public class Player {
                 }
             }
         }
-    }  
+        return score[0];
+    } 
 }
 
